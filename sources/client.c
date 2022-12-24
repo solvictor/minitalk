@@ -6,18 +6,13 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:30:55 by vegret            #+#    #+#             */
-/*   Updated: 2022/12/23 20:20:52 by vegret           ###   ########.fr       */
+/*   Updated: 2022/12/24 01:32:31 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static int	ft_isspace(int c)
-{
-	return (c == 32 || (c > 8 && c < 14));
-}
-
-static int	ft_atoi(const char *nptr)
+static int	ft_atoi(const char *s)
 {
 	long	result;
 	int		sign;
@@ -25,44 +20,52 @@ static int	ft_atoi(const char *nptr)
 
 	result = 0;
 	i = 0;
-	while (ft_isspace(nptr[i]))
+	while (s[i] == 32 || (s[i] > 8 && s[i] < 14))
 		i++;
 	sign = 1;
-	if (nptr[i] == '-' || nptr[i] == '+')
-		if (nptr[i++] == '-')
+	if (s[i] == '-' || s[i] == '+')
+		if (s[i++] == '-')
 			sign = -1;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
+	while (s[i] >= '0' && s[i] <= '9')
 	{
 		if (result > (LONG_MAX / 10))
 			return (-1 * (sign == 1));
-		result = result * 10 + nptr[i++] - 48;
+		result = result * 10 + s[i++] - 48;
 		if (result < 0)
 			return (-1 * (sign == 1));
 	}
 	return (result * sign);
 }
 
-int	send_char(t_pid pid, char c)
-{
-	
-	return (0);
-}
-
-int	send_message(t_pid pid, char *message)
+int	send_char(pid_t pid, char c)
 {
 	int	i;
 
 	i = 0;
-	while (message[i])
+	while (i < 8)
 	{
-		if (send_char(pid, message[i]))
-			return (1);
+		if (c & (1 << i))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR2);
 		i++;
+		usleep(10);
 	}
 	return (0);
 }
 
-int	main(int argc, char const *argv[])
+int	send_message(pid_t pid, char *message)
+{
+	while (*message)
+	{
+		if (send_char(pid, *message))
+			return (1);
+		message++;
+	}
+	return (0);
+}
+
+int	main(int argc, char *argv[])
 {
 	pid_t	pid;
 
