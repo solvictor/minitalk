@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:30:55 by vegret            #+#    #+#             */
-/*   Updated: 2022/12/24 23:35:37 by vegret           ###   ########.fr       */
+/*   Updated: 2022/12/25 00:21:47 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	send_char(pid_t pid, unsigned char c)
 			return (1);
 		c >>= 1;
 		i++;
-		usleep(10);
+		usleep(50);
 	}
 	return (0);
 }
@@ -55,7 +55,7 @@ int	send_message(pid_t pid, char *message)
 	while (*message)
 	{
 		if (send_char(pid, (unsigned char) *message))
-			return (ft_printf("Failed to send character\n"), 1);
+			return (ft_printf("Failed to send a character\n"), 1);
 		message++;
 		usleep(10);
 	}
