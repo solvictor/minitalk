@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:30:55 by vegret            #+#    #+#             */
-/*   Updated: 2022/12/26 16:10:44 by vegret           ###   ########.fr       */
+/*   Updated: 2022/12/26 17:03:54 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	parse_pid(const char *s)
 	return (pid);
 }
 
-static int	send_char(pid_t pid, unsigned char c)
+static int	send_char(int pid, unsigned char c)
 {
 	int	i;
 	int	res;
@@ -54,7 +54,7 @@ static int	send_char(pid_t pid, unsigned char c)
 	return (0);
 }
 
-static int	send_message(pid_t pid, char *message)
+static int	send_message(int pid, char *message)
 {
 	if (!*message)
 		return (0);
@@ -78,7 +78,7 @@ static void	receive(int sig)
 
 int	main(int argc, char *argv[])
 {
-	pid_t				pid;
+	int					pid;
 	struct sigaction	action;
 
 	if (argc != 3)
