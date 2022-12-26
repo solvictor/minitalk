@@ -63,8 +63,6 @@ server:		$(OBJ_S)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
 			@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
-			@echo "\033[1A                                                     "
-			@echo -n "\033[1A"
 			@$(CC) $(CFLAGS) -I $(INCLUDE) -I $(FT_PRINTF)/includes -c $< -o $@
 
 $(OBJF):
@@ -75,9 +73,9 @@ clean:
 			@echo "$(BLUE)$(NAME) object files cleaned!$(DEF_COLOR)"
 
 fclean:		clean
+			@$(SMAKE) fclean -C ${FT_PRINTF}
 			@$(RM) client
 			@$(RM) server
-			@$(RM) $(FT_PRINTF)/libftprintf.a
 			@echo "$(CYAN)$(NAME) executable files cleaned!$(DEF_COLOR)"
 
 re:			fclean all
