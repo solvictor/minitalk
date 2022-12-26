@@ -6,11 +6,13 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:30:55 by vegret            #+#    #+#             */
-/*   Updated: 2022/12/26 02:15:42 by vegret           ###   ########.fr       */
+/*   Updated: 2022/12/26 16:10:44 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+volatile sig_atomic_t	g_response = 0;
 
 static int	parse_pid(const char *s)
 {
@@ -32,42 +34,46 @@ static int	parse_pid(const char *s)
 static int	send_char(pid_t pid, unsigned char c)
 {
 	int	i;
-	int	response;
+	int	res;
 
 	i = 0;
 	while (i < 8)
 	{
 		if (c % 2)
-			response = kill(pid, SIGUSR1);
+			res = kill(pid, SIGUSR1);
 		else
-			response = kill(pid, SIGUSR2);
-		if (response == -1)
+			res = kill(pid, SIGUSR2);
+		if (res == -1)
 			return (1);
 		c >>= 1;
 		i++;
-		usleep(50);
+		while (!g_response)
+			pause();
+		g_response = 0;
 	}
 	return (0);
 }
 
 static int	send_message(pid_t pid, char *message)
 {
+	if (!*message)
+		return (0);
 	while (*message)
 	{
 		if (send_char(pid, (unsigned char) *message))
 			return (ft_printf("Failed to send a character\n"), 1);
 		message++;
-		usleep(10);
 	}
 	if (send_char(pid, (unsigned char) 0))
 		return (ft_printf("Failed to send message end\n"), 1);
+	ft_printf("Server successfully received message\n");
 	return (0);
 }
 
 static void	receive(int sig)
 {
-	(void) sig;
-	ft_printf("Server successfully received message\n");
+	if (sig == SIGUSR1)
+		g_response = 1;
 }
 
 int	main(int argc, char *argv[])
