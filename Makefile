@@ -6,7 +6,7 @@ SRC_DIR		= sources/
 OBJ_DIR		= objects/
 FT_PRINTF	= ft_printf
 CC			= cc
-CFLAGS		= -Wall -Wextra
+CFLAGS		= -Wall -Wextra -Werror
 RM			= rm -f
 SMAKE		= make --no-print-directory
 
