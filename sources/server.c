@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:47:08 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/07 22:10:25 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/08 00:35:28 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,26 +57,29 @@ static void	add_uc(t_uclist **message, unsigned char data)
 
 static void	receive(int sig, siginfo_t *info, void *context)
 {
-	static t_uclist			*current_message;
-	static unsigned char	current_char = 0;
-	static int				i = 0;
+	static t_uclist			*current_message[PID_MAX];
+	static unsigned char	current_char[PID_MAX];
+	static int				bit[PID_MAX];
 
 	(void) context;
-	current_char |= (sig == SIGUSR1) << i;
-	if (++i == 8)
+	if (!info)
+		return ;
+	current_char[info->si_pid] |= (sig == SIGUSR1) << bit[info->si_pid];
+	if (++bit[info->si_pid] == 8)
 	{
-		if (current_char == 0)
+		if (current_char[info->si_pid] == 0)
 		{
-			print_message(current_message);
-			clear_message(&current_message);
+			print_message(current_message[info->si_pid]);
+			clear_message(&current_message[info->si_pid]);
 		}
 		else
-			add_uc(&current_message, current_char);
-		current_char = 0;
-		i = 0;
+			add_uc(&current_message[info->si_pid], current_char[info->si_pid]);
+		current_char[info->si_pid] = 0;
+		bit[info->si_pid] = 0;
 	}
-	if (!info || kill(info->si_pid, SIGUSR1) == -1)
-		ft_printf("Failed to send acknowledgement to client\n");
+	if (kill(info->si_pid, SIGUSR1) == -1)
+		ft_printf("Failed to send acknowledgement to client %d\n",
+			info->si_pid);
 }
 
 int	main(int argc, char const *argv[])
