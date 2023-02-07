@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:47:08 by vegret            #+#    #+#             */
-/*   Updated: 2022/12/26 16:09:13 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/07 22:10:25 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,7 @@ static void	receive(int sig, siginfo_t *info, void *context)
 		i = 0;
 	}
 	if (!info || kill(info->si_pid, SIGUSR1) == -1)
-		ft_printf("Failed to send acknowledgement to client %d\n",
-			info->si_pid);
+		ft_printf("Failed to send acknowledgement to client\n");
 }
 
 int	main(int argc, char const *argv[])

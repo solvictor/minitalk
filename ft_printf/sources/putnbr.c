@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 20:30:40 by vegret            #+#    #+#             */
-/*   Updated: 2022/11/15 10:44:03 by vegret           ###   ########.fr       */
+/*   Updated: 2023/02/07 22:11:05 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	putint(int n, t_flag *flag)
 	int	printed;
 
 	printed = 0;
-	if (!(flag && flag->flags & ZERO))
+	if (flag && !(flag->flags & ZERO))
 		printed = fill_before(flag, printinglen(n, flag));
 	if (n < 0)
 	{
@@ -61,9 +61,9 @@ int	putint(int n, t_flag *flag)
 	}
 	else
 	{
-		if (flag->flags & SPACE)
+		if (flag && flag->flags & SPACE)
 			printed += write(1, " ", 1);
-		if (flag->flags & PLUS)
+		if (flag && flag->flags & PLUS)
 			printed += write(1, "+", 1);
 		if (!(n == 0 && flag && flag->flags & DOT && flag->precision == 0))
 			printed += putzeros(flag, intlen(n), printed) + putint_aux(n);
