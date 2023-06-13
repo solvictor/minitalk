@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:25:37 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/08 00:23:02 by vegret           ###   ########.fr       */
+/*   Updated: 2023/06/13 17:25:50 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include	<unistd.h>
 # include	<signal.h>
 # include	"ft_printf.h"
-# define PID_MAX 30000
+# define PID_MAX 300000
 
 typedef struct s_uclist {
 	unsigned char	data;

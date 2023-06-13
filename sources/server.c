@@ -6,7 +6,7 @@
 /*   By: vegret <victor.egret.pro@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/23 19:47:08 by vegret            #+#    #+#             */
-/*   Updated: 2023/02/10 12:30:19 by vegret           ###   ########.fr       */
+/*   Updated: 2023/06/13 17:24:13 by vegret           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	receive(int sig, siginfo_t *info, void *context)
 	static unsigned char	current_char[PID_MAX];
 	static int				bit[PID_MAX];
 
-	if (!info || info >= PID_MAX)
+	if (!info || info->si_pid >= PID_MAX)
 		return (ft_printf("Unsupported client PID\n"), (void) context);
 	current_char[info->si_pid] |= (sig == SIGUSR1) << bit[info->si_pid];
 	if (++bit[info->si_pid] == 8)
